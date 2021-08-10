@@ -32,21 +32,3 @@ def match(q1, q2):
     q2n = group_action_by_gamma(q2, gamma)
 
     return q2n, gamma
-
-def fisher_rao(q1,q2):
-    '''
-    Input: Two Square-Root Velocity Functions, represented as (n,T) matrices
-    Output: The Fisher-Rao distance between the two SRVF's
-    '''
-
-    q2n, gamma = match(q1, q2)
-    gamma_dot = np.gradient(gamma, 1 / (len(gamma) - 1))
-    gamma_dot_sqrt = np.sqrt(gamma_dot)
-    q2n_tilde = np.zeros_like(q2n)
-
-    n, _ = q2n.shape
-    for i in range(n):
-        q2n_tilde[i,:] = np.multiply(gamma_dot_sqrt, q2n[i,:])
-    
-    return induced_norm_L2(q1 - q2n_tilde)
-
