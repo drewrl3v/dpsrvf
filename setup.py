@@ -69,7 +69,7 @@ setup(
     author_email='shjoshi@ieee.org, drewrl3v@gmail.com',
     description='dpsrvf',
     long_description='',
-    ext_modules=[CMakeExtension('dpsrvf/dprvf')],
+    ext_modules=[CMakeExtension('dpsrvf/dpsrvf')],
     cmdclass=dict(build_ext=CMakeBuild),
     packages=['dpsrvf'],
     package_dir={'':'src'},
