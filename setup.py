@@ -65,8 +65,8 @@ class CMakeBuild(build_ext):
 setup(
     name='dpsrvf',
     version='0.1',
-    author='Shantanu H. Joshi',
-    author_email='shjoshi@ieee.org',
+    author='Shantanu H. Joshi, Andrew Lizarraga',
+    author_email='shjoshi@ieee.org, drewrl3v@gmail.com',
     description='dpsrvf',
     long_description='',
     ext_modules=[CMakeExtension('dpsrvf/dprvf')],
