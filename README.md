@@ -11,6 +11,7 @@ Install CMAKE
 ```
 git clone https://github.com/drewrl3v/dpsrvf.git
 cd dpsrvf
+git submodule update --init
 pip install .
 ```
 
