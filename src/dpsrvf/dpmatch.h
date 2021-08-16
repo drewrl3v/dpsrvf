@@ -16,6 +16,8 @@ public:
 
     void linint(float *xnew, float *ynew, int cnt, float *xx, float *yy, int n);
 
+    float CostFn2(float *q1L, float *q2L, int k, int l, int i, int j, int n, int scl);
+
 
 };
 
