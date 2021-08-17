@@ -29,6 +29,7 @@ def match(q1, q2):
     '''
     gamma = dpmatch().match(q1,q2)
     gamma = gamma/np.max(gamma)
-    q2n = group_action_by_gamma(q2, gamma)
+    q2_copy = q2
+    q2n = group_action_by_gamma(q2_copy, gamma)
 
     return q2n, gamma
