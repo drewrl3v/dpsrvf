@@ -21,7 +21,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 {
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
-    float** Energy = nullptr;
+    float** Energy = NULL;
 
     constexpr int NBR_SIZ = 63;
     constexpr int Nbrs[NBR_SIZ][2] = {{10,9}, {10,7}, {10,3}, {10,1}, {9,10},
@@ -66,16 +66,16 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     int k = 0,l = 0;
     float minCandE = 10000;
     int minCandE_idx = 0;
-    float** Path_x = nullptr;
-    float** Path_y = nullptr;
+    float** Path_x = NULL;
+    float** Path_y = NULL;
     Path_x = (float **)malloc(T*sizeof(float *));
     //Path_x = new float** (T * sizeof(float*)) // float pointer set to value T * siazeof(float*)
     Path_y = (float **)malloc(T*sizeof(float *));
 
-    float *x = nullptr;
-    float *y = nullptr;
-    float *xnew = nullptr;
-    float *ynew = nullptr;
+    float *x = NULL;
+    float *y = NULL;
+    float *xnew = NULL;
+    float *ynew = NULL;
     x = (float *)malloc(T*sizeof(float));
     y = (float *)malloc(T*sizeof(float));
     float *xx1 = (float *) malloc(T*sizeof(float) );
@@ -194,7 +194,7 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
     slope =(float ) ( i - k)/(j - l);
     if (slope == 0)
         printf("\nslope zero\n");
-    float *vecarray = nullptr;
+    float *vecarray = NULL;
     vecarray = (float *)malloc(n * sizeof(float));
 
     for(x = l; x <= j ; x ++)
@@ -211,7 +211,7 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
     }
     E = E2/T;
     free(vecarray);
-    vecarray = nullptr;
+    vecarray = NULL;
     return E;
 }
 
