@@ -21,7 +21,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 {
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
-    float **Energy = nullptr;
+    float** Energy = nullptr;
 
     const int NBR_SIZ = 63;
     const int Nbrs[NBR_SIZ][2] = { // the dynamic time warping neighborhood 
@@ -49,9 +49,9 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 //         };
 //       const int NBR_SIZ = 41;
 
-    int NumPlot = 15;
-    float shfx = 0.2;
-    float shfy = 0.2;
+    //int NumPlot = 15;
+    //float shfx = 0.2;
+    //float shfy = 0.2;
     int i = 0;
     int j = 0;
     int Num = 0;
@@ -59,9 +59,9 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     int k = 0,l = 0;
     float minCandE = 10000;
     int minCandE_idx = 0;
-    float **Path_x = nullptr;
-    float **Path_y = nullptr;
-    float cost = 0;
+    float** Path_x = nullptr;
+    float** Path_y = nullptr;
+    //float cost = 0;
     Path_x = (float **)malloc(T*sizeof(float *));
     Path_y = (float **)malloc(T*sizeof(float *));
 
@@ -147,7 +147,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     float* gamma = new float [T];
     linint(xnew, ynew, cnt, xx1, gamma, T);
 
-    cost = 0;
+    //cost = 0;
     for(i = 0;i < T;i ++)
     {
         free(Energy[i]);
@@ -267,7 +267,7 @@ shape::~shape()
     free(arr);
 
 }
-
+/*
 float dpmatch::CostFn2(float *q1L, float *q2L,int n, int scl, int k, int l, int i, int j) {
     float m = (i-k)/(float)(j-l), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp;
     int x, idx, d, iL=i*scl, kL=k*scl, lL=l*scl;
@@ -285,3 +285,4 @@ float dpmatch::CostFn2(float *q1L, float *q2L,int n, int scl, int k, int l, int 
 
     return E;
 }
+*/
