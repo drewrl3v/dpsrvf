@@ -25,11 +25,8 @@ def group_action_by_gamma(q, gamma):
 def match(q1, q2):
     '''
     Input: Two Square-Root Velocity Functions, represented as (n,T) matrices
-    Output: A warped SRVF q2n matching q1 and the warping function gamma
+    Output: the warping function gamma from q2 to q1
     '''
     gamma = dpmatch().match(q1,q2)
-    gamma = gamma/np.max(gamma)
-    q2_copy = q2
-    q2n = group_action_by_gamma(q2_copy, gamma)
 
-    return q2n, gamma
+    return gamma

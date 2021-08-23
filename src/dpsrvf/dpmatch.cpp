@@ -21,7 +21,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 {
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
-    float **Energy = NULL;
+    float **Energy = nullptr;
 
     const int NBR_SIZ = 63;
     const int Nbrs[NBR_SIZ][2] = { // the dynamic time warping neighborhood 
@@ -59,16 +59,16 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     int k = 0,l = 0;
     float minCandE = 10000;
     int minCandE_idx = 0;
-    float **Path_x = NULL;
-    float **Path_y = NULL;
+    float **Path_x = nullptr;
+    float **Path_y = nullptr;
     float cost = 0;
     Path_x = (float **)malloc(T*sizeof(float *));
     Path_y = (float **)malloc(T*sizeof(float *));
 
-    float *x = NULL;
-    float *y = NULL;
-    float *xnew = NULL;
-    float *ynew = NULL;
+    float *x = nullptr;
+    float *y = nullptr;
+    float *xnew = nullptr;
+    float *ynew = nullptr;
     x = (float *)malloc(T*sizeof(float));
     y = (float *)malloc(T*sizeof(float));
     float *xx1 = (float *) malloc(T*sizeof(float) );
@@ -187,7 +187,7 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
     slope =(float ) ( i - k)/(j - l);
     if (slope == 0)
         printf("\nslope zero\n");
-    float *vecarray = NULL;
+    float *vecarray = nullptr;
     vecarray = (float *)malloc(n * sizeof(float));
 
     for(x = l; x <= j ; x ++)
@@ -204,7 +204,7 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
     }
     E = E2/T;
     free(vecarray);
-    vecarray = NULL;
+    vecarray = nullptr;
     return E;
 }
 
