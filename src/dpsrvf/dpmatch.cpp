@@ -23,6 +23,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     // T is the size (num of points along the shape)
     float** Energy = nullptr;
 
+/*
     constexpr int NBR_SIZ = 63;
     constexpr int Nbrs[NBR_SIZ][2] = { // the dynamic time warping neighborhood 
             {  1,  1 }, {  1,  2 }, {  1,  3 }, {  1,  4 }, {  1,  5 }, {  1,  6 }, {  1,  7 }, {  1,  8 }, {  1,  9 }, {  1, 10 },
@@ -33,9 +34,17 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
             {  8,  7 }, {  8,  9 }, {  9,  1 }, {  9,  2 }, {  9,  4 }, {  9,  5 }, {  9,  7 }, {  9,  8 }, {  9, 10 }, { 10,  1 },
             { 10,  3 }, { 10,  7 }, { 10,  9 }
     };
-    
-    //const int NBR_SIZ = 7;
-    //int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}};
+ 
+*/
+
+
+    //constexpr int NBR_SIZ = 7;
+    //constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}};
+
+    constexpr int NBR_SIZ = 7;
+    constexpr int Nbrs[NBR_SIZ][2] = {{3,2},{3,1},{2,3},{1,3},{2,1}, {1,2}, {1,1}};//{{1, 1}, {1, 2}, {2, 1}};
+
+
 
     //const int NBR_SIZ = 23;
     //int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}, {1,4}, {3,4}, {4,3}, {4,1}, {1,5}, {2,5}, {3,5}, {4,5}, {5,4}, {5,3},
@@ -105,7 +114,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
                 }
                 else
                 {
-                    CandE[Num] = 10000;
+                    CandE[Num] = 5000000;//10000;
                 }
                 if(CandE[Num] < minCandE )
                 {
