@@ -11,12 +11,12 @@ py::array_t<float> match(dpmatch& self,
                          const py::array_t<float, py::array::c_style | py::array::forcecast>& q2){
     py::buffer_info q1buff = q1.request();
     py::buffer_info q2buff = q2.request();
-    float *q1ptr = static_cast<float *>(q1buff.ptr);
-    float *q2ptr = static_cast<float *>(q2buff.ptr);
+    float* q1ptr = static_cast<float*>(q1buff.ptr);
+    float* q2ptr = static_cast<float*>(q2buff.ptr);
     int n = q1.shape(0);
     int T = q1.shape(1);
 
-    float *gamma = self.match(n, T, q1ptr, q2ptr); //match will allocate memory
+    float* gamma = self.match(n, T, q1ptr, q2ptr); //match will allocate memory
     std::vector<float> gamma_vect {gamma, gamma + T};
     delete gamma; //delete gamma
     return py::cast(gamma_vect);
