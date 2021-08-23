@@ -23,8 +23,8 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     // T is the size (num of points along the shape)
     float** Energy = nullptr;
 
-    const int NBR_SIZ = 63;
-    const int Nbrs[NBR_SIZ][2] = { // the dynamic time warping neighborhood 
+    constexpr int NBR_SIZ = 63;
+    constexpr int Nbrs[NBR_SIZ][2] = { // the dynamic time warping neighborhood 
             {  1,  1 }, {  1,  2 }, {  1,  3 }, {  1,  4 }, {  1,  5 }, {  1,  6 }, {  1,  7 }, {  1,  8 }, {  1,  9 }, {  1, 10 },
             {  2,  1 }, {  2,  3 }, {  2,  5 }, {  2,  7 }, {  2,  9 }, {  3,  1 }, {  3,  2 }, {  3,  4 }, {  3,  5 }, {  3,  7 },
             {  3,  8 }, {  3, 10 }, {  4,  1 }, {  4,  3 }, {  4,  5 }, {  4,  7 }, {  4,  9 }, {  5,  1 }, {  5,  2 }, {  5,  3 },
@@ -49,9 +49,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 //         };
 //       const int NBR_SIZ = 41;
 
-    //int NumPlot = 15;
-    //float shfx = 0.2;
-    //float shfy = 0.2;
     int i = 0;
     int j = 0;
     int Num = 0;
@@ -61,8 +58,8 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     int minCandE_idx = 0;
     float** Path_x = nullptr;
     float** Path_y = nullptr;
-    //float cost = 0;
     Path_x = (float **)malloc(T*sizeof(float *));
+    //Path_x = new float** (T * sizeof(float*)) // float pointer set to value T * siazeof(float*)
     Path_y = (float **)malloc(T*sizeof(float *));
 
     float *x = nullptr;
@@ -77,9 +74,9 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     ynew = (float *)malloc(T*sizeof(float));
 
     int cnt = 0;
-    Energy = (float **)malloc(T*sizeof(float *));
 
-    for(i = 0;i < T;i ++)
+    Energy = (float **)malloc(T*sizeof(float *));
+    for(i = 0; i < T; i++)
     {
         Energy[i] = (float *)calloc(T,sizeof(float));
         Path_x[i] = (float *)calloc(T,sizeof(float));
@@ -98,13 +95,13 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
         for(j = 1; j < T ; j ++)
         {
             minCandE = 10000;
-            for(Num = 0; Num < NBR_SIZ; Num ++)
+            for(Num = 0; Num < NBR_SIZ; Num++)
             {
                 k = i - Nbrs[Num][0];
                 l = j - Nbrs[Num][1];
                 if(k >= 0 && l >= 0)
                 {
-                    CandE[Num] = Energy[k][l] + DPcost(q1, q2,n, T, k,l,i,j); //CostFn2(q1, q2,n, T, k,l,i,j);
+                    CandE[Num] = Energy[k][l] + DPcost(q1, q2,n, T, k,l,i,j);
                 }
                 else
                 {
