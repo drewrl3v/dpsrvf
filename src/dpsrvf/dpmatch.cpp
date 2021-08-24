@@ -22,7 +22,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
     float** Energy = NULL;
-
     constexpr int NBR_SIZ = 63;
     constexpr int Nbrs[NBR_SIZ][2] = {{10,9}, {10,7}, {10,3}, {10,1}, {9,10},
                                       {9,8}, {9,7}, {9,5}, {9,4}, {9,2},
@@ -101,7 +100,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     xx1[0] = 0;
     for(i = 1 ; i < T; i ++)
     {
-        fflush(stdout);
+       // fflush(stdout);
         for(j = 1; j < T ; j ++)
         {
             minCandE = 10000;
@@ -115,7 +114,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
                 }
                 else
                 {
-                    CandE[Num] = 5000000;//10000;
+                    CandE[Num] = 10000;//5000000;//10000;
                 }
                 if(CandE[Num] < minCandE )
                 {
@@ -154,7 +153,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     float* gamma = new float [T];
     linint(xnew, ynew, cnt, xx1, gamma, T);
 
-    //cost = 0;
     for(i = 0;i < T;i ++)
     {
         free(Energy[i]);
@@ -184,16 +182,20 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
     int x;
     float y;
     int y1,y2;
-    float slope = 0;
-    float E,E1,E2;
+    float slope{0};
+    //float E,E1,E2;
     float f;
     float vec11, vec12, vec21, vec22,vec23;
 
-    E1 = 0; E2 = 0;
-    E = 0;
-    slope =(float ) ( i - k)/(j - l);
-    if (slope == 0)
+    float E1{0}; 
+    float E2{0};
+    float E{0};
+    //E2 = 0;
+    //E = 0;
+    slope = (float) (i - k)/(j - l);
+    if (i == k) // removed slope == 0
         printf("\nslope zero\n");
+
     float *vecarray = NULL;
     vecarray = (float *)malloc(n * sizeof(float));
 
@@ -217,13 +219,12 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
 
 void dpmatch::linint(float *xnew, float *ynew, int cnt, float *xx, float *yy, int n)
 {
-	int i = 0;
-	int idx = 0;
 	//Assume xnew and xx are sorted. 
 	//Find the interval where xx[0] is located
-	float m = 0;
-	for (i = 0; i < n; i ++)
+	float slope{0};
+	for (int i = 0; i < n; i++)
 	{
+    int idx{0};
 		while(idx < cnt - 1)
 		{
 			if(xx[i] >= xnew[idx] && xx[i] <= xnew[idx+1] )
@@ -235,8 +236,8 @@ void dpmatch::linint(float *xnew, float *ynew, int cnt, float *xx, float *yy, in
 			{
 				// Need to extrapolate
 				// Use the slope 	of points corresponding to idx and idx + 1
-				m = (ynew[idx+1]  - ynew[idx])/(xnew[idx+1]  - xnew[idx]);
-				yy[i] = ynew[idx] + m * ( xx[i] - xnew[idx]);
+				slope = (ynew[idx+1]  - ynew[idx])/(xnew[idx+1]  - xnew[idx]);
+				yy[i] = ynew[idx] + slope * ( xx[i] - xnew[idx]);
 				break;
 			}
 			else if(xx[i] >= xnew[cnt-1] )
@@ -244,12 +245,12 @@ void dpmatch::linint(float *xnew, float *ynew, int cnt, float *xx, float *yy, in
 				//This is beyond the boundary of xnew
 				// Need to extrapolate
 				// Use the slope 	of points corresponding to cnt -1 and cnt -2
-				m = (ynew[cnt-1]  - ynew[cnt-2])/(xnew[cnt-1]  - xnew[cnt-2]);
-				yy[i] = ynew[cnt - 1] + m * ( xx[i] - xnew[cnt-1]);			
+				slope = (ynew[cnt-1]  - ynew[cnt-2])/(xnew[cnt-1]  - xnew[cnt-2]);
+				yy[i] = ynew[cnt - 1] + slope * ( xx[i] - xnew[cnt-1]);			
 				break;
 			}
 			else 
-				idx ++;
+				idx++;
 			}
 		}
 }
