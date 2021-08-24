@@ -22,7 +22,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
 
-/*
     constexpr int NBR_SIZ = 63;
     constexpr int Nbrs[NBR_SIZ][2] = {{10,9}, {10,7}, {10,3}, {10,1}, {9,10},
                                       {9,8}, {9,7}, {9,5}, {9,4}, {9,2},
@@ -36,7 +35,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
                                       {3,4}, {3,2}, {3,1}, {2,9}, {2,7}, 
                                       {2,5}, {2,3}, {2,1}, {1,10}, {1,9}, 
                                       {1,8}, {1,7}, {1,6}, {1,5}, {1,4}, {1,3}, {1,2}, {1,1}};
-*/
 
     //constexpr int NBR_SIZ = 7;
     //constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}};
@@ -48,8 +46,8 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     //int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}, {1,4}, {3,4}, {4,3}, {4,1}, {1,5}, {2,5}, {3,5}, {4,5}, {5,4}, {5,3},{5,2}, {5,1}, {1,6}, {5,6}, {6,5}, {6,1}};
 
     // Looks like this works
-    constexpr int NBR_SIZ = 23;
-    constexpr int Nbrs[NBR_SIZ][2] = {{6,1}, {6,5}, {5,6}, {1,6}, {5,1}, {5,2}, {5,3}, {5,4}, {4,5}, {3,5}, {2,5}, {1,5}, {4,1}, {4,3}, {3,4}, {1,4}, {3,1}, {1,3}, {3,2}, {2,3}, {2,1}, {1,2}, {1,1}};
+    //constexpr int NBR_SIZ = 23;
+    //constexpr int Nbrs[NBR_SIZ][2] = {{6,1}, {6,5}, {5,6}, {1,6}, {5,1}, {5,2}, {5,3}, {5,4}, {4,5}, {3,5}, {2,5}, {1,5}, {4,1}, {4,3}, {3,4}, {1,4}, {3,1}, {1,3}, {3,2}, {2,3}, {2,1}, {1,2}, {1,1}};
 
     // drastic  
 //         int Nbrs[][2] = 
@@ -175,22 +173,24 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
 float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, int j)
 {
-    float slope{0};
+    float slope{(float) (i - k)/(j - l)};
     float E2{0};
-    float E{0};
-    slope = (float) (i - k)/(j - l);
-    //if (i == k) // removed slope == 0
-    //    printf("\nslope zero\n");
+    float E;
 
     float* vecarray = NULL;
     vecarray = (float* )malloc(n * sizeof(float));
 
+    float y;
+    int y1;
+    int y2;
+    float f;
+
     for(int x = l; x <= j; x++)
     {
-        float y = {k + (x - l) * slope};
-        int y1{(int)floorf(y)};
-        int y2{(int)ceilf(y)};
-        float f{y - y1};
+        y = k + (x - l) * slope;
+        y1 = (int)floorf(y);
+        y2 = (int)ceilf(y);
+        f = y - y1;
         for (int kk = 0; kk < n; kk++)
         {
             vecarray[kk] = (f*q2[kk*T + y2] + (1 - f)*q2[kk*T + y1])*sqrt(slope);
