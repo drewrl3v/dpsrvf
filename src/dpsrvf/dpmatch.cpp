@@ -129,13 +129,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     float* gamma = new float [T];
     linint(xnew, ynew, cnt, xx1, gamma, T);
 
-    for(int i = 0; i < T; i ++)
-    {
-        free(Energy[i]);
-        free(Path_x[i]);
-        free(Path_y[i]);
-    }
-
     free(Path_x);
     free(Path_y);
     free(Energy);
