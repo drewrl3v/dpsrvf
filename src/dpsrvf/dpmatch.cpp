@@ -54,37 +54,28 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     int l = 0;
     float minCandE = 10000;
     int minCandE_idx = 0;
-    float** Path_x = NULL;
-    float** Path_y = NULL;
-    Path_x = (float **)malloc(T*sizeof(float *));
-    Path_y = (float **)malloc(T*sizeof(float *));
+    float** Path_x = {(float **)malloc(T*sizeof(float *))};
+    float** Path_y = {(float **)malloc(T*sizeof(float *))};
 
-    float* x = NULL;
-    float* y = NULL;
-    float* xnew = NULL;
-    float* ynew = NULL;
-    x = (float *)malloc(T*sizeof(float));
-    y = (float *)malloc(T*sizeof(float));
+    float* x = {(float *)malloc(T*sizeof(float))};
+    float* y = {(float *)malloc(T*sizeof(float))};
     float* xx1 = (float *) malloc(T*sizeof(float) );
 
-    xnew = (float *)malloc(T*sizeof(float));
-    ynew = (float *)malloc(T*sizeof(float));
+    float* xnew = {(float *)malloc(T*sizeof(float))};
+    float* ynew = {(float *)malloc(T*sizeof(float))};
 
-    //int cnt = 0;
-    float** Energy = NULL; // moved here
-    Energy = (float **)malloc(T*sizeof(float *));
-
+    //Forming energies associated with different paths
+    float** Energy = {(float **)malloc(T*sizeof(float *))};
     for(int i = 0; i < T; i++)
     {
         Energy[i] = (float *)calloc(T,sizeof(float));
         Path_x[i] = (float *)calloc(T,sizeof(float));
         Path_y[i] = (float *)calloc(T,sizeof(float));
-        //Forming energies associated with different paths
         Energy[0][i] = 5000000;
         Energy[i][0] = 5000000;
     }
+    Energy[0][0] = 0; // This is the starting point of the dynamic time warping path
 
-    Energy[0][0] = 0;
     xx1[0] = 0;
     for(int i = 1 ; i < T; i ++)
     {
