@@ -49,45 +49,39 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     //constexpr int NBR_SIZ = 23;
     //constexpr int Nbrs[NBR_SIZ][2] = {{6,1}, {6,5}, {5,6}, {1,6}, {5,1}, {5,2}, {5,3}, {5,4}, {4,5}, {3,5}, {2,5}, {1,5}, {4,1}, {4,3}, {3,4}, {1,4}, {3,1}, {1,3}, {3,2}, {2,3}, {2,1}, {1,2}, {1,1}};
 
-    // drastic  
-//         int Nbrs[][2] = 
-//         {{1, 1},{1, 2},{2, 1},{2, 3},{3, 2},{1, 3},{3, 1},{1, 4},{3, 4},{4, 3},{4, 1},{1, 5},{2, 5},{3, 5},{4, 5}, 
-//          {5, 4},{5, 3},{5, 2},{5, 1},{1, 6},{5, 6},{6, 5},{6, 1},{1, 7},{2, 7},{3, 7},{4, 7},{5, 7},{6, 7},{1, 6},
-//          {1, 7},{1, 8},{1, 9},{1, 10},{7, 1},{8, 1},{9, 1},{10, 1},{1, 20}, {2, 20},{3, 30},
-//         };
-//       const int NBR_SIZ = 41;
-
+    int i;
+    int j;
+    int Num;
     float CandE[NBR_SIZ];
-    int k = 0,l = 0;
+    int k = 0;
+    int l = 0;
     float minCandE = 10000;
     int minCandE_idx = 0;
     float** Path_x = NULL;
     float** Path_y = NULL;
     Path_x = (float **)malloc(T*sizeof(float *));
-    //Path_x = new float** (T * sizeof(float*)) // float pointer set to value T * siazeof(float*)
     Path_y = (float **)malloc(T*sizeof(float *));
 
-    float *x = NULL;
-    float *y = NULL;
-    float *xnew = NULL;
-    float *ynew = NULL;
+    float* x = NULL;
+    float* y = NULL;
+    float* xnew = NULL;
+    float* ynew = NULL;
     x = (float *)malloc(T*sizeof(float));
     y = (float *)malloc(T*sizeof(float));
-    float *xx1 = (float *) malloc(T*sizeof(float) );
+    float* xx1 = (float *) malloc(T*sizeof(float) );
 
     xnew = (float *)malloc(T*sizeof(float));
     ynew = (float *)malloc(T*sizeof(float));
 
     int cnt = 0;
     float** Energy = NULL; // moved here
-
     Energy = (float **)malloc(T*sizeof(float *));
-    for(int i = 0; i < T; i++)
+
+    for(i = 0; i < T; i++)
     {
         Energy[i] = (float *)calloc(T,sizeof(float));
         Path_x[i] = (float *)calloc(T,sizeof(float));
         Path_y[i] = (float *)calloc(T,sizeof(float));
-
         //Forming energies associated with different paths
         Energy[0][i] = 5000000;
         Energy[i][0] = 5000000;
@@ -95,13 +89,13 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
     Energy[0][0] = 0;
     xx1[0] = 0;
-    for(int i = 1 ; i < T; i ++)
+    for(i = 1 ; i < T; i ++)
     {
        // fflush(stdout);
-        for(int j = 1; j < T ; j ++)
+        for(j = 1; j < T ; j ++)
         {
             minCandE = 10000;
-            for(int Num = 0; Num < NBR_SIZ; Num++)
+            for(Num = 0; Num < NBR_SIZ; Num++)
             {
                 k = i - Nbrs[Num][0];
                 l = j - Nbrs[Num][1];
@@ -111,7 +105,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
                 }
                 else
                 {
-                    CandE[Num] = 5000000;//10000;
+                    CandE[Num] = 10000;//5000000;//10000;
                 }
                 if(CandE[Num] < minCandE )
                 {
@@ -127,17 +121,18 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
         xx1[i] = (float ) i/(T - 1);
     }
 
-    x[0] = T-1; y[0] = T-1;
+    x[0] = T-1;
+    y[0] = T-1;
     while ( x[cnt] > 0 )
     {
-        int i{(int) y[cnt]};
-        int j{(int) x[cnt]};
+        i = (int) y[cnt];
+        j = (int) x[cnt];
         y[cnt + 1] = Path_x[i][j];
         x[cnt + 1] = Path_y[i][j];
         cnt ++;
     }
 
-    for (int i = 0; i < cnt; i ++)
+    for (i = 0; i < cnt; i ++)
     {
         xnew[i] = (x[cnt-i-1] -x[cnt-1] )/(x[0] - x[cnt - 1]);
         ynew[i] = (y[cnt-i-1] -y[cnt-1] )/(y[0] - y[cnt - 1]);
@@ -150,7 +145,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     float* gamma = new float [T];
     linint(xnew, ynew, cnt, xx1, gamma, T);
 
-    for(int i = 0;i < T;i ++)
+    for(i = 0;i < T;i ++)
     {
         free(Energy[i]);
         free(Path_x[i]);
@@ -208,9 +203,10 @@ void dpmatch::linint(float *xnew, float *ynew, int cnt, float *xx, float *yy, in
 	//Assume xnew and xx are sorted. 
 	//Find the interval where xx[0] is located
 	float slope{0};
+  int idx{0};
 	for (int i = 0; i < n; i++)
 	{
-    int idx{0};
+    //int idx{0}; // Not sure if this shoud be inside the for-loop
 		while(idx < cnt - 1)
 		{
 			if(xx[i] >= xnew[idx] && xx[i] <= xnew[idx+1] )
@@ -261,22 +257,3 @@ shape::~shape()
     free(arr);
 
 }
-/*
-float dpmatch::CostFn2(float *q1L, float *q2L,int n, int scl, int k, int l, int i, int j) {
-    float m = (i-k)/(float)(j-l), sqrtm = sqrt(m), E = 0, y, tmp, ip, fp;
-    int x, idx, d, iL=i*scl, kL=k*scl, lL=l*scl;
-
-    for (x = kL; x <= iL; ++x) {
-        y = (x-kL)*m + lL;
-        fp = modf(y, &ip);
-        idx = (int)(ip + (fp >= 0.5));
-
-        for (d = 0; d < n; ++d) {
-            tmp = q1L[n*x + d] - sqrtm*q2L[n*idx + d];
-            E += tmp*tmp;
-        }
-    }
-
-    return E;
-}
-*/
