@@ -70,7 +70,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     xnew = (float *)malloc(T*sizeof(float));
     ynew = (float *)malloc(T*sizeof(float));
 
-    int cnt = 0;
+    //int cnt = 0;
     float** Energy = NULL; // moved here
     Energy = (float **)malloc(T*sizeof(float *));
 
@@ -120,6 +120,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
     x[0] = T-1;
     y[0] = T-1;
+    int cnt{0};
     while ( x[cnt] > 0 )
     {
         int i = {(int) y[cnt]};
@@ -165,18 +166,18 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
 float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, int j)
 {
-    float slope{(float) (i - k)/(j - l)};
+    //float slope{(float) (i - k)/(j - l)};
     float E2{0};
-
-    //float* vecarray{NULL};
     float* vecarray = {(float* )malloc(n * sizeof(float))};
 
     for(int x = l; x <= j; x++)
     {
+        float slope{(float) (i - k)/(j - l)};
         float y = {k + (x - l) * slope};
         int y1 = {(int)floorf(y)};
         int y2 = {(int)ceilf(y)};
         float f = {y - y1};
+
         for (int kk = 0; kk < n; kk++)
         {
             vecarray[kk] = (f*q2[kk*T + y2] + (1 - f)*q2[kk*T + y1])*sqrt(slope);
