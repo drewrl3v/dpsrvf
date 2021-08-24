@@ -1,7 +1,5 @@
 #include <stdlib.h>
-#include <time.h>
 #include <math.h>
-#include <iostream>
 #include <vector>
 #include "dpmatch.h"
 using namespace std;
@@ -42,8 +40,8 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     //constexpr int NBR_SIZ = 7;
     //constexpr int Nbrs[NBR_SIZ][2] = {{3,2},{3,1},{2,3},{1,3},{2,1},{1,2},{1,1}};
 
-    //const int NBR_SIZ = 23;
-    //int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}, {1,4}, {3,4}, {4,3}, {4,1}, {1,5}, {2,5}, {3,5}, {4,5}, {5,4}, {5,3},{5,2}, {5,1}, {1,6}, {5,6}, {6,5}, {6,1}};
+    //constexpr int NBR_SIZ = 23;
+    //constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}, {1,4}, {3,4}, {4,3}, {4,1}, {1,5}, {2,5}, {3,5}, {4,5}, {5,4}, {5,3},{5,2}, {5,1}, {1,6}, {5,6}, {6,5}, {6,1}};
 
     // Looks like this works
     //constexpr int NBR_SIZ = 23;
@@ -99,7 +97,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
         xx1[i] = (float ) i/(T - 1);
     }
 
-
     float* x = {(float *)malloc(T*sizeof(float))};
     float* y = {(float *)malloc(T*sizeof(float))};
     x[0] = T-1;
@@ -142,10 +139,8 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     return(gamma);
 }
 
-
 float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, int j)
 {
-    //float slope{(float) (i - k)/(j - l)};
     float E2{0};
     float* vecarray = {(float* )malloc(n * sizeof(float))};
 
@@ -216,7 +211,6 @@ shape::shape( int v_iT)
     m_v12 = (float *)malloc(v_iT*sizeof(float));
     m_v13 = (float *)malloc(v_iT*sizeof(float));
     m_iT = v_iT;
-
 }
 
 shape::~shape()
@@ -226,5 +220,4 @@ shape::~shape()
     for (int i=0; i<m_n; i++)
         free(arr[i]);
     free(arr);
-
 }
