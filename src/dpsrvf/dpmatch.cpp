@@ -179,15 +179,15 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
 float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, int j)
 {
-    int x;
-    float y;
-    int y1,y2;
+    //int x;
+    //float y;
+    //int y1,y2;
     float slope{0};
     //float E,E1,E2;
-    float f;
+    //float f;
     float vec11, vec12, vec21, vec22,vec23;
 
-    float E1{0}; 
+    //float E1{0};  // why is this even here? 
     float E2{0};
     float E{0};
     //E2 = 0;
@@ -196,15 +196,15 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
     if (i == k) // removed slope == 0
         printf("\nslope zero\n");
 
-    float *vecarray = NULL;
-    vecarray = (float *)malloc(n * sizeof(float));
+    float* vecarray = NULL;
+    vecarray = (float* )malloc(n * sizeof(float));
 
-    for(x = l; x <= j ; x ++)
+    for(int x = l; x <= j; x++)
     {
-        y = k + (x - l) * slope;
-        y1 = (int )floorf(y);
-        y2 = (int )ceilf(y);
-        f = y - y1;
+        float y = {k + (x - l) * slope};
+        int y1{(int)floorf(y)};
+        int y2{(int)ceilf(y)};
+        float f{y - y1};
         for (int kk = 0; kk < n; kk++)
         {
             vecarray[kk] = (f*q2[kk*T + y2] + (1 - f)*q2[kk*T + y1])*sqrt(slope);
