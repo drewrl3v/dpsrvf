@@ -49,9 +49,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     //constexpr int NBR_SIZ = 23;
     //constexpr int Nbrs[NBR_SIZ][2] = {{6,1}, {6,5}, {5,6}, {1,6}, {5,1}, {5,2}, {5,3}, {5,4}, {4,5}, {3,5}, {2,5}, {1,5}, {4,1}, {4,3}, {3,4}, {1,4}, {3,1}, {1,3}, {3,2}, {2,3}, {2,1}, {1,2}, {1,1}};
 
-    int i;
-    int j;
-    int Num;
     float CandE[NBR_SIZ];
     int k = 0;
     int l = 0;
@@ -77,7 +74,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     float** Energy = NULL; // moved here
     Energy = (float **)malloc(T*sizeof(float *));
 
-    for(i = 0; i < T; i++)
+    for(int i = 0; i < T; i++)
     {
         Energy[i] = (float *)calloc(T,sizeof(float));
         Path_x[i] = (float *)calloc(T,sizeof(float));
@@ -89,13 +86,13 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
     Energy[0][0] = 0;
     xx1[0] = 0;
-    for(i = 1 ; i < T; i ++)
+    for(int i = 1 ; i < T; i ++)
     {
        // fflush(stdout);
-        for(j = 1; j < T ; j ++)
+        for(int j = 1; j < T ; j ++)
         {
             minCandE = 10000;
-            for(Num = 0; Num < NBR_SIZ; Num++)
+            for(int Num = 0; Num < NBR_SIZ; Num++)
             {
                 k = i - Nbrs[Num][0];
                 l = j - Nbrs[Num][1];
@@ -125,14 +122,14 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     y[0] = T-1;
     while ( x[cnt] > 0 )
     {
-        i = (int) y[cnt];
-        j = (int) x[cnt];
+        int i = {(int) y[cnt]};
+        int j = {(int) x[cnt]};
         y[cnt + 1] = Path_x[i][j];
         x[cnt + 1] = Path_y[i][j];
-        cnt ++;
+        cnt++;
     }
 
-    for (i = 0; i < cnt; i ++)
+    for (int i = 0; i < cnt; i ++)
     {
         xnew[i] = (x[cnt-i-1] -x[cnt-1] )/(x[0] - x[cnt - 1]);
         ynew[i] = (y[cnt-i-1] -y[cnt-1] )/(y[0] - y[cnt - 1]);
@@ -145,7 +142,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     float* gamma = new float [T];
     linint(xnew, ynew, cnt, xx1, gamma, T);
 
-    for(i = 0;i < T;i ++)
+    for(int i = 0; i < T; i ++)
     {
         free(Energy[i]);
         free(Path_x[i]);
@@ -170,29 +167,23 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
 {
     float slope{(float) (i - k)/(j - l)};
     float E2{0};
-    float E;
 
-    float* vecarray = NULL;
-    vecarray = (float* )malloc(n * sizeof(float));
-
-    float y;
-    int y1;
-    int y2;
-    float f;
+    //float* vecarray{NULL};
+    float* vecarray = {(float* )malloc(n * sizeof(float))};
 
     for(int x = l; x <= j; x++)
     {
-        y = k + (x - l) * slope;
-        y1 = (int)floorf(y);
-        y2 = (int)ceilf(y);
-        f = y - y1;
+        float y = {k + (x - l) * slope};
+        int y1 = {(int)floorf(y)};
+        int y2 = {(int)ceilf(y)};
+        float f = {y - y1};
         for (int kk = 0; kk < n; kk++)
         {
             vecarray[kk] = (f*q2[kk*T + y2] + (1 - f)*q2[kk*T + y1])*sqrt(slope);
             E2 = E2 + (q1[kk*T + x] - vecarray[kk])*(q1[kk*T + x] - vecarray[kk]);
         }
     }
-    E = E2/T;
+    float E{E2/T};
     free(vecarray);
     vecarray = NULL;
     return E;
