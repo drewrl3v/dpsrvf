@@ -49,22 +49,10 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     //constexpr int NBR_SIZ = 23;
     //constexpr int Nbrs[NBR_SIZ][2] = {{6,1}, {6,5}, {5,6}, {1,6}, {5,1}, {5,2}, {5,3}, {5,4}, {4,5}, {3,5}, {2,5}, {1,5}, {4,1}, {4,3}, {3,4}, {1,4}, {3,1}, {1,3}, {3,2}, {2,3}, {2,1}, {1,2}, {1,1}};
 
-    float CandE[NBR_SIZ];
-    int k = 0;
-    int l = 0;
-    float minCandE = 10000;
-    int minCandE_idx = 0;
-    float** Path_x = {(float **)malloc(T*sizeof(float *))};
-    float** Path_y = {(float **)malloc(T*sizeof(float *))};
-
-    float* x = {(float *)malloc(T*sizeof(float))};
-    float* y = {(float *)malloc(T*sizeof(float))};
-    float* xx1 = (float *) malloc(T*sizeof(float) );
-
-    float* xnew = {(float *)malloc(T*sizeof(float))};
-    float* ynew = {(float *)malloc(T*sizeof(float))};
 
     //Forming energies associated with different paths
+    float** Path_x = {(float **)malloc(T*sizeof(float *))};
+    float** Path_y = {(float **)malloc(T*sizeof(float *))};
     float** Energy = {(float **)malloc(T*sizeof(float *))};
     for(int i = 0; i < T; i++)
     {
@@ -76,17 +64,19 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     }
     Energy[0][0] = 0; // This is the starting point of the dynamic time warping path
 
+    float CandE[NBR_SIZ]{0};
+    int minCandE_idx = 0;
+    float* xx1 = (float *) malloc(T*sizeof(float));
     xx1[0] = 0;
     for(int i = 1 ; i < T; i ++)
     {
-       // fflush(stdout);
         for(int j = 1; j < T ; j ++)
         {
-            minCandE = 10000;
+            float minCandE{10000};
             for(int Num = 0; Num < NBR_SIZ; Num++)
             {
-                k = i - Nbrs[Num][0];
-                l = j - Nbrs[Num][1];
+                int k = {i - Nbrs[Num][0]};
+                int l = {j - Nbrs[Num][1]};
                 if(k >= 0 && l >= 0)
                 {
                     CandE[Num] = Energy[k][l] + DPcost(q1, q2,n, T, k,l,i,j);
@@ -109,6 +99,9 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
         xx1[i] = (float ) i/(T - 1);
     }
 
+
+    float* x = {(float *)malloc(T*sizeof(float))};
+    float* y = {(float *)malloc(T*sizeof(float))};
     x[0] = T-1;
     y[0] = T-1;
     int cnt{0};
@@ -121,6 +114,8 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
         cnt++;
     }
 
+    float* xnew = {(float *)malloc(T*sizeof(float))};
+    float* ynew = {(float *)malloc(T*sizeof(float))};
     for (int i = 0; i < cnt; i ++)
     {
         xnew[i] = (x[cnt-i-1] -x[cnt-1] )/(x[0] - x[cnt - 1]);
