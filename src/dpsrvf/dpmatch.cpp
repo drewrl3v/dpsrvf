@@ -21,7 +21,8 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 {
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
-    //float** Energy = NULL;
+
+/*
     constexpr int NBR_SIZ = 63;
     constexpr int Nbrs[NBR_SIZ][2] = {{10,9}, {10,7}, {10,3}, {10,1}, {9,10},
                                       {9,8}, {9,7}, {9,5}, {9,4}, {9,2},
@@ -35,7 +36,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
                                       {3,4}, {3,2}, {3,1}, {2,9}, {2,7}, 
                                       {2,5}, {2,3}, {2,1}, {1,10}, {1,9}, 
                                       {1,8}, {1,7}, {1,6}, {1,5}, {1,4}, {1,3}, {1,2}, {1,1}};
-
+*/
 
     //constexpr int NBR_SIZ = 7;
     //constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}};
@@ -47,8 +48,8 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     //int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}, {1,4}, {3,4}, {4,3}, {4,1}, {1,5}, {2,5}, {3,5}, {4,5}, {5,4}, {5,3},{5,2}, {5,1}, {1,6}, {5,6}, {6,5}, {6,1}};
 
     // Looks like this works
-    //constexpr int NBR_SIZ = 23;
-    //constexpr int Nbrs[NBR_SIZ][2] = {{6,1}, {6,5}, {5,6}, {1,6}, {5,1}, {5,2}, {5,3}, {5,4}, {4,5}, {3,5}, {2,5}, {1,5}, {4,1}, {4,3}, {3,4}, {1,4}, {3,1}, {1,3}, {3,2}, {2,3}, {2,1}, {1,2}, {1,1}};
+    constexpr int NBR_SIZ = 23;
+    constexpr int Nbrs[NBR_SIZ][2] = {{6,1}, {6,5}, {5,6}, {1,6}, {5,1}, {5,2}, {5,3}, {5,4}, {4,5}, {3,5}, {2,5}, {1,5}, {4,1}, {4,3}, {3,4}, {1,4}, {3,1}, {1,3}, {3,2}, {2,3}, {2,1}, {1,2}, {1,1}};
 
     // drastic  
 //         int Nbrs[][2] = 
@@ -58,9 +59,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 //         };
 //       const int NBR_SIZ = 41;
 
-    int i = 0;
-    int j = 0;
-    int Num = 0;
     float CandE[NBR_SIZ];
     int k = 0,l = 0;
     float minCandE = 10000;
@@ -86,7 +84,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     float** Energy = NULL; // moved here
 
     Energy = (float **)malloc(T*sizeof(float *));
-    for(i = 0; i < T; i++)
+    for(int i = 0; i < T; i++)
     {
         Energy[i] = (float *)calloc(T,sizeof(float));
         Path_x[i] = (float *)calloc(T,sizeof(float));
@@ -99,13 +97,13 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
     Energy[0][0] = 0;
     xx1[0] = 0;
-    for(i = 1 ; i < T; i ++)
+    for(int i = 1 ; i < T; i ++)
     {
        // fflush(stdout);
-        for(j = 1; j < T ; j ++)
+        for(int j = 1; j < T ; j ++)
         {
             minCandE = 10000;
-            for(Num = 0; Num < NBR_SIZ; Num++)
+            for(int Num = 0; Num < NBR_SIZ; Num++)
             {
                 k = i - Nbrs[Num][0];
                 l = j - Nbrs[Num][1];
@@ -115,7 +113,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
                 }
                 else
                 {
-                    CandE[Num] = 10000;//5000000;//10000;
+                    CandE[Num] = 5000000;//10000;
                 }
                 if(CandE[Num] < minCandE )
                 {
@@ -134,14 +132,14 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     x[0] = T-1; y[0] = T-1;
     while ( x[cnt] > 0 )
     {
-        i = (int) y[cnt];
-        j = (int) x[cnt];
-        y[cnt + 1] = Path_x[i] [j]  ;
-        x[cnt + 1] = Path_y[i] [j] ;
+        int i{(int) y[cnt]};
+        int j{(int) x[cnt]};
+        y[cnt + 1] = Path_x[i][j];
+        x[cnt + 1] = Path_y[i][j];
         cnt ++;
     }
 
-    for (i = 0; i < cnt; i ++)
+    for (int i = 0; i < cnt; i ++)
     {
         xnew[i] = (x[cnt-i-1] -x[cnt-1] )/(x[0] - x[cnt - 1]);
         ynew[i] = (y[cnt-i-1] -y[cnt-1] )/(y[0] - y[cnt - 1]);
@@ -154,7 +152,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     float* gamma = new float [T];
     linint(xnew, ynew, cnt, xx1, gamma, T);
 
-    for(i = 0;i < T;i ++)
+    for(int i = 0;i < T;i ++)
     {
         free(Energy[i]);
         free(Path_x[i]);
@@ -173,9 +171,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
     return(gamma);
 }
-
-
-
 
 
 float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, int j)
