@@ -64,8 +64,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
 
     float CandE[NBR_SIZ]{0};
     int minCandE_idx = 0;
-    float* xx1 = (float *) malloc(T*sizeof(float));
-    xx1[0] = 0;
     for(int i = 1 ; i < T; i ++)
     {
         for(int j = 1; j < T ; j ++)
@@ -94,7 +92,6 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
                 Path_y[i][j] = j - Nbrs[minCandE_idx][1];
             }
         }
-        xx1[i] = (float ) i/(T - 1);
     }
 
     float* x = {(float *)malloc(T*sizeof(float))};
@@ -124,6 +121,10 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     xnew[0] = 0;
     ynew[0] = 0;
     float* gamma = new float [T];
+    float* xx1 = (float *) malloc(T*sizeof(float));
+    for(int i = 0 ; i < T; i ++){
+        xx1[i] = (float ) i/(T - 1);
+    }
     linint(xnew, ynew, cnt, xx1, gamma, T);
 
     free(Path_x);
