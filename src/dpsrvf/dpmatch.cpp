@@ -95,8 +95,8 @@ constexpr int Nbrs[NBR_SIZ][2] = {
 
     float CandE[NBR_SIZ]{0};
     int minCandE_idx = 0;
-    float* xx1 = (float *) malloc(T*sizeof(float));
-    xx1[0] = 0;
+    //float* xx1 = (float *) malloc(T*sizeof(float));
+    //xx1[0] = 0;
     for(int i = 1 ; i < T; i ++) // i = 1
     {
         for(int j = 1; j < T ; j ++) // j = 1
@@ -125,7 +125,6 @@ constexpr int Nbrs[NBR_SIZ][2] = {
                 Path_y[i][j] = j - Nbrs[minCandE_idx][1];
             }
         }
-        xx1[i] = (float ) i/(T - 1);
     }
 
     float* x = {(float *)malloc(T*sizeof(float))};
@@ -155,7 +154,11 @@ constexpr int Nbrs[NBR_SIZ][2] = {
     xnew[0] = 0;
     ynew[0] = 0;
     float* gamma = new float [T];
-    linint(xnew, ynew, cnt, xx1, gamma, T); // perform linear interpolation on segments to compute gamma
+    float* xx1 = (float *) malloc(T*sizeof(float));
+    for(int i = 0 ; i < T; i ++){
+        xx1[i] = (float ) i/(T - 1);
+    }
+    linint(xnew, ynew, cnt, xx1, gamma, T);
 
     free(Path_x);
     free(Path_y);
