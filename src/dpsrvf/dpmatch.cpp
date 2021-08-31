@@ -80,9 +80,9 @@ constexpr int Nbrs[NBR_SIZ][2] = {
 
 
     //Forming energies associated with different paths
-    float** Path_x = {(float **)malloc(T*sizeof(float *))};
-    float** Path_y = {(float **)malloc(T*sizeof(float *))};
-    float** Energy = {(float **)malloc(T*sizeof(float *))};
+    float** Path_x = {(float** )malloc(T*sizeof(float* ))};
+    float** Path_y = {(float** )malloc(T*sizeof(float* ))};
+    float** Energy = {(float** )malloc(T*sizeof(float* ))};
     for(int i = 0; i < T; i++)
     {
         Energy[i] = (float *)calloc(T,sizeof(float));
@@ -194,7 +194,7 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
     }
     float E{E2/T};
     free(vecarray);
-    vecarray = NULL;
+    //vecarray = NULL;
     return E;
 }
 
