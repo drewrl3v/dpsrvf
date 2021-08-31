@@ -17,7 +17,7 @@ py::array_t<float> match(dpmatch& self,
     int T = q1.shape(1);
 
     float* gamma = self.match(n, T, q1ptr, q2ptr); //match will allocate memory
-    std::vector<float> gamma_vect {gamma, gamma + T};
+    std::vector<float> gamma_vect {gamma, gamma + T}; // gamma is a pointer, iterating over it gives the rest of gamma
     delete gamma; //delete gamma
     return py::cast(gamma_vect);
 }

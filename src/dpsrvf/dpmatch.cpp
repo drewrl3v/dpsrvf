@@ -15,11 +15,13 @@ dpmatch::~dpmatch()
 }
 
 
-float* dpmatch::match(int n, int T, float *q1, float *q2)
+float* dpmatch::match(int n, int T, float* q1, float* q2)
 {
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
 
+
+/*
     constexpr int NBR_SIZ = 63;
     constexpr int Nbrs[NBR_SIZ][2] = {{10,9}, {10,7}, {10,3}, {10,1}, {9,10},
                                       {9,8}, {9,7}, {9,5}, {9,4}, {9,2},
@@ -33,19 +35,48 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
                                       {3,4}, {3,2}, {3,1}, {2,9}, {2,7}, 
                                       {2,5}, {2,3}, {2,1}, {1,10}, {1,9}, 
                                       {1,8}, {1,7}, {1,6}, {1,5}, {1,4}, {1,3}, {1,2}, {1,1}};
+*/
 
+constexpr int NBR_SIZ = 63;
+constexpr int Nbrs[NBR_SIZ][2] = {
+            {  1,  1 }, {  1,  2 }, {  1,  3 }, {  1,  4 }, {  1,  5 }, {  1,  6 }, {  1,  7 }, {  1,  8 }, {  1,  9 }, {  1, 10 },
+                        {  2,  1 }, {  2,  3 }, {  2,  5 }, {  2,  7 }, {  2,  9 }, {  3,  1 }, {  3,  2 }, {  3,  4 }, {  3,  5 }, {  3,  7 },
+                                    {  3,  8 }, {  3, 10 }, {  4,  1 }, {  4,  3 }, {  4,  5 }, {  4,  7 }, {  4,  9 }, {  5,  1 }, {  5,  2 }, {  5,  3 },
+                                                {  5,  4 }, {  5,  6 }, {  5,  7 }, {  5,  8 }, {  5,  9 }, {  6,  1 }, {  6,  5 }, {  6,  7 }, {  7,  1 }, {  7,  2 },
+                                                            {  7,  3 }, {  7,  4 }, {  7,  5 }, {  7,  6 }, {  7,  8 }, {  7,  9 }, {  7, 10 }, {  8,  1 }, {  8,  3 }, {  8,  5 },
+                                                                        {  8,  7 }, {  8,  9 }, {  9,  1 }, {  9,  2 }, {  9,  4 }, {  9,  5 }, {  9,  7 }, {  9,  8 }, {  9, 10 }, { 10,  1 },
+                                                                                    { 10,  3 }, { 10,  7 }, { 10,  9 }
+                                                                                        };
+
+/*
+    constexpr int NBR_SIZ = 63;
+    constexpr int Nbrs[NBR_SIZ][2] = {{1,1}, {1,2}, {2,1}, {3,1}, {1,3}, {1,4}, {2,3}, {3,2}, 
+                                      {4,1}, {5,1}, {1,5}, {1,6}, {2,5}, {3,4}, {4,3}, {5,2},
+                                      {1,6}, {7,1}, {5,3}, {3,5}, {1,7}, {1,8}, {2,7}, {4,5},
+                                      {5,4}, {7,2}, {8,1}, {9,1}, {7,3}, {3,7}, {1,9}, {1,10},
+                                      {2,9}, {3,8}, {4,7}, {5,6}, {6,5}, {7,4}, {8,3}, {9,2},
+                                      {10,1}, {11,1}, {7,5}, {5,7}, {1,11}, {1,12}, {2,11},
+                                      {3,10}, {4,9}, {5,8}, {6,7}, {7,6}, {8,5}, {9,4}, {10,3},
+                                      {11,2}, {12,1}, {13,1}, {11,3}, {9,5}, {5,9}, {3,11}, {1,13}}; // added here
+*/
     //constexpr int NBR_SIZ = 7;
     //constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}};
 
     //constexpr int NBR_SIZ = 7;
     //constexpr int Nbrs[NBR_SIZ][2] = {{3,2},{3,1},{2,3},{1,3},{2,1},{1,2},{1,1}};
 
-    //constexpr int NBR_SIZ = 23;
-    //constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}, {1,4}, {3,4}, {4,3}, {4,1}, {1,5}, {2,5}, {3,5}, {4,5}, {5,4}, {5,3},{5,2}, {5,1}, {1,6}, {5,6}, {6,5}, {6,1}};
-
     // Looks like this works
     //constexpr int NBR_SIZ = 23;
     //constexpr int Nbrs[NBR_SIZ][2] = {{6,1}, {6,5}, {5,6}, {1,6}, {5,1}, {5,2}, {5,3}, {5,4}, {4,5}, {3,5}, {2,5}, {1,5}, {4,1}, {4,3}, {3,4}, {1,4}, {3,1}, {1,3}, {3,2}, {2,3}, {2,1}, {1,2}, {1,1}};
+
+    //
+    //constexpr int NBR_SIZ = 23;
+    //constexpr int Nbrs[NBR_SIZ][2] = {{ 1, 1 },{ 1, 2 },{ 2, 1 },{ 2, 3 },{ 3, 2 },{ 1, 3 },{ 3, 1 },{ 1, 4 },{ 3, 4 },{ 4, 3 },{ 4, 1 },{ 1, 5 },{ 2, 5 },
+//                                    { 3, 5 },{ 4, 5 },{ 5, 4 },{ 5, 3 },{ 5, 2 },{ 5, 1 },{ 1, 6 },{ 5, 6 },{ 6, 5 },{ 6, 1 }};
+
+    //constexpr int NBR_SIZ = 3;
+    //constexpr int Nbrs[NBR_SIZ][2] = {{ 1, 1 },{ 1, 2 },{ 2, 1 }};
+
 
 
     //Forming energies associated with different paths
@@ -66,22 +97,22 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     int minCandE_idx = 0;
     float* xx1 = (float *) malloc(T*sizeof(float));
     xx1[0] = 0;
-    for(int i = 1 ; i < T; i ++)
+    for(int i = 1 ; i < T; i ++) // i = 1
     {
-        for(int j = 1; j < T ; j ++)
+        for(int j = 1; j < T ; j ++) // j = 1
         {
             float minCandE{10000};
-            for(int Num = 0; Num < NBR_SIZ; Num++)
+            for(int Num = 0; Num < NBR_SIZ; Num++) // Num < NBR_SIZ // Num = 0
             {
-                int k = {i - Nbrs[Num][0]};
-                int l = {j - Nbrs[Num][1]};
-                if(k >= 0 && l >= 0)
+                int k = {i - Nbrs[Num][0]}; // -
+                int l = {j - Nbrs[Num][1]}; // -
+                if(k >= 0 && l >= 0) // >=
                 {
                     CandE[Num] = Energy[k][l] + DPcost(q1, q2,n, T, k,l,i,j);
                 }
                 else
                 {
-                    CandE[Num] = 10000;//5000000;//10000;
+                    CandE[Num] = 5000000;//10000;
                 }
                 if(CandE[Num] < minCandE )
                 {
@@ -124,7 +155,7 @@ float* dpmatch::match(int n, int T, float *q1, float *q2)
     xnew[0] = 0;
     ynew[0] = 0;
     float* gamma = new float [T];
-    linint(xnew, ynew, cnt, xx1, gamma, T);
+    linint(xnew, ynew, cnt, xx1, gamma, T); // perform linear interpolation on segments to compute gamma
 
     free(Path_x);
     free(Path_y);
@@ -147,7 +178,7 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
     for(int x = l; x <= j; x++)
     {
         float slope{(float) (i - k)/(j - l)};
-        float y = {k + (x - l) * slope};
+        float y = {k + (x - l) * slope}; // k + (x - l) * slope
         int y1 = {(int)floorf(y)};
         int y2 = {(int)ceilf(y)};
         float f = {y - y1};
