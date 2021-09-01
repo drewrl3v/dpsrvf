@@ -2,6 +2,7 @@
 #include <math.h>
 #include <vector>
 #include "dpmatch.h"
+#include <array>
 using namespace std;
 
 dpmatch::dpmatch()
@@ -37,6 +38,7 @@ constexpr int Nbrs[NBR_SIZ][2] = {
 
     // Forming Energies DTW grid
     std::vector<std::vector<float>> Energy(T, std::vector<float>(T));
+    //std::array<std::array<float, T>,T> Energy; // requires T to be const
     for(int i = 0; i < T; i++) // T
     {
        Energy[0][i] = 5000000;

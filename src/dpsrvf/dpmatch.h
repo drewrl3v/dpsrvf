@@ -9,7 +9,7 @@ public:
 
     ~dpmatch();
 
-    float* match(int n, int T, float *q1, float *q2);
+    float* match(int n, int T, float* q1, float* q2);
 
     float DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, int j);
 
