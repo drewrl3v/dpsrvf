@@ -173,10 +173,11 @@ constexpr int Nbrs[NBR_SIZ][2] = {
     return(gamma);
 }
 
-float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, int j)
+float dpmatch::DPcost(float* q1, float* q2, int n, int T, int k, int l, int i, int j)
 {
     float E2{0};
-    float* vecarray = {(float* )malloc(n * sizeof(float))};
+    //float* vecarray = {(float* )malloc(n * sizeof(float))};
+    std::vector<float> vecarray(n);
 
     for(int x = l; x <= j; x++)
     {
@@ -193,8 +194,7 @@ float dpmatch::DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, i
         }
     }
     float E{E2/T};
-    free(vecarray);
-    //vecarray = NULL;
+    //free(vecarray);
     return E;
 }
 
