@@ -198,7 +198,7 @@ float dpmatch::DPcost(float* q1, float* q2, int n, int T, int k, int l, int i, i
     return E;
 }
 
-void dpmatch::linint(float *xnew, float *ynew, int cnt, float *xx, float *yy, int n)
+void dpmatch::linint(float* xnew, float* ynew, int cnt, float* xx, float* yy, int n)
 {
 	//Assume xnew and xx are sorted. 
 	//Find the interval where xx[0] is located
@@ -237,7 +237,7 @@ void dpmatch::linint(float *xnew, float *ynew, int cnt, float *xx, float *yy, in
 		}
 }
 
-shape::shape( int v_iT)
+shape::shape(int v_iT)
 {
     m_pfPhi = (float *)malloc(v_iT*sizeof(float));
     m_pfTheta = (float *)malloc(v_iT*sizeof(float));
