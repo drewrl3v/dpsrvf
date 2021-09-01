@@ -82,16 +82,25 @@ constexpr int Nbrs[NBR_SIZ][2] = {
     //Forming energies associated with different paths
     float** Path_x = {(float** )malloc(T*sizeof(float* ))};
     float** Path_y = {(float** )malloc(T*sizeof(float* ))};
-    float** Energy = {(float** )malloc(T*sizeof(float* ))};
-    for(int i = 0; i < T; i++)
+    //float** Energy = {(float** )malloc(T*sizeof(float* ))};
+    for(int i = 0; i < T; i++) // < ??
     {
-        Energy[i] = (float *)calloc(T,sizeof(float));
+    //    Energy[i] = (float *)calloc(T,sizeof(float));
         Path_x[i] = (float *)calloc(T,sizeof(float));
         Path_y[i] = (float *)calloc(T,sizeof(float));
-        Energy[0][i] = 5000000;
-        Energy[i][0] = 5000000;
+    //    Energy[0][i] = 5000000;
+    //    Energy[i][0] = 5000000;
     }
-    Energy[0][0] = 0; // This is the starting point of the dynamic time warping path
+    //Energy[0][0] = 0; // This is the starting point of the dynamic time warping path
+
+
+    std::vector<std::vector<float>> Energy_sub(T, std::vector<float>(T));
+    for(int i = 0; i < T; i++)
+    {
+       Energy_sub[0][i] = 5000000;
+       Energy_sub[i][0] = 5000000;
+    }
+    Energy_sub[0][0] = 0;
 
     float CandE[NBR_SIZ]{0};
     int minCandE_idx = 0;
@@ -108,7 +117,7 @@ constexpr int Nbrs[NBR_SIZ][2] = {
                 int l = {j - Nbrs[Num][1]}; // -
                 if(k >= 0 && l >= 0) // >=
                 {
-                    CandE[Num] = Energy[k][l] + DPcost(q1, q2,n, T, k,l,i,j);
+                    CandE[Num] = Energy_sub[k][l] + DPcost(q1, q2,n, T, k,l,i,j); // added _sub
                 }
                 else
                 {
@@ -119,7 +128,7 @@ constexpr int Nbrs[NBR_SIZ][2] = {
                     minCandE = CandE[Num];
                     minCandE_idx = Num;
                 }
-                Energy[i][j] = minCandE;
+                Energy_sub[i][j] = minCandE;  // added _sub
 
                 Path_x[i][j] = i - Nbrs[minCandE_idx][0];
                 Path_y[i][j] = j - Nbrs[minCandE_idx][1];
@@ -162,7 +171,7 @@ constexpr int Nbrs[NBR_SIZ][2] = {
 
     free(Path_x);
     free(Path_y);
-    free(Energy);
+    //free(Energy);
 
     free(x);
     free(y);
