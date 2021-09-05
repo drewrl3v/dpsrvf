@@ -2,7 +2,7 @@
 #include <math.h>
 #include <vector>
 #include "dpmatch.h"
-#include <array>
+//#include <array>
 using namespace std;
 
 dpmatch::dpmatch()
@@ -20,7 +20,6 @@ float* dpmatch::match(int n, int T, float* q1, float* q2)
 {
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
-
 /*
 constexpr int NBR_SIZ = 63;
 constexpr int Nbrs[NBR_SIZ][2] = {
@@ -32,10 +31,11 @@ constexpr int Nbrs[NBR_SIZ][2] = {
             {  8,  7 }, {  8,  9 }, {  9,  1 }, {  9,  2 }, {  9,  4 }, {  9,  5 }, {  9,  7 }, {  9,  8 }, {  9, 10 }, { 10,  1 },
             { 10,  3 }, { 10,  7 }, { 10,  9 }
             };
-*/
+            */
 
 constexpr int NBR_SIZ = 7;
 constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}};
+
 /*
 constexpr int NBR_SIZ = 23;
 constexpr int Nbrs[NBR_SIZ][2] = { 
@@ -66,8 +66,22 @@ constexpr int Nbrs[NBR_SIZ][2] = {
 */
 
     //Forming energies associated with different paths
-    std::vector<std::vector<float>> Path_x(T, std::vector<float>(T));
-    std::vector<std::vector<float>> Path_y(T, std::vector<float>(T));
+    //std::vector<std::vector<float>> Path_x(T, std::vector<float>(T));
+    //std::vector<std::vector<float>> Path_y(T, std::vector<float>(T));
+    float **Path_x = NULL; 
+    float **Path_y = NULL;
+    Path_x = (float **)malloc(T*sizeof(float *));
+    Path_y = (float **)malloc(T*sizeof(float *));
+    for(int i = 0;i < T; i++)
+    {
+        //Energy[i] = (float *)calloc(T,sizeof(float));
+        Path_x[i] = (float *)calloc(T,sizeof(float));
+        Path_y[i] = (float *)calloc(T,sizeof(float));
+
+        //Forming energies associated with different paths
+        //Energy[0][i] = 5000000;
+        //Energy[i][0] = 5000000;
+    }
 
     // Forming Energies DTW grid
     std::vector<std::vector<float>> Energy(T, std::vector<float>(T));
@@ -144,6 +158,16 @@ constexpr int Nbrs[NBR_SIZ][2] = {
         xx1[i] = (float ) i/(T - 1);
     }
     linint(xnew, ynew, cnt, xx1, gamma, T);
+    
+
+    // Free Paths
+    for(int i = 0;i < T;i ++)
+    {
+        //free(Energy[i]);
+        free(Path_x[i]);
+        free(Path_y[i]);
+    }
+    free(Path_x); free(Path_y);
 
     delete[] xx1;
     return(gamma);
