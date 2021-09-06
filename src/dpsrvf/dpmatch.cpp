@@ -1,8 +1,5 @@
-#include <stdlib.h>
 #include <math.h>
-#include <vector>
 #include "dpmatch.h"
-//#include <array>
 using namespace std;
 
 dpmatch::dpmatch()
@@ -65,83 +62,78 @@ constexpr int Nbrs[NBR_SIZ][2] = {
                                               };
 */
 
-    //Forming energies associated with different paths
-    //std::vector<std::vector<float>> Path_x(T, std::vector<float>(T));
-    //std::vector<std::vector<float>> Path_y(T, std::vector<float>(T));
-    float **Path_x = NULL; 
-    float **Path_y = NULL;
-    Path_x = (float **)malloc(T*sizeof(float *));
-    Path_y = (float **)malloc(T*sizeof(float *));
+    // Allocate memory for different paths
+    float **Path_x = (float **)malloc(T*sizeof(float *));
+    float **Path_y = (float **)malloc(T*sizeof(float *));
+    // Allocate memory for Energy associated with different paths
+    float **Energy = (float **)malloc(T*sizeof(float *));
     for(int i = 0;i < T; i++)
     {
-        //Energy[i] = (float *)calloc(T,sizeof(float));
+        Energy[i] = (float *)calloc(T,sizeof(float));
         Path_x[i] = (float *)calloc(T,sizeof(float));
         Path_y[i] = (float *)calloc(T,sizeof(float));
 
-        //Forming energies associated with different paths
-        //Energy[0][i] = 5000000;
-        //Energy[i][0] = 5000000;
-    }
-
-    // Forming Energies DTW grid
-    std::vector<std::vector<float>> Energy(T, std::vector<float>(T));
-    //std::array<std::array<float, T>,T> Energy; // requires T to be const
-    for(int i = 0; i < T; i++) // T
-    {
-       Energy[0][i] = 50000000000;//5000000;
-       Energy[i][0] = 50000000000;//5000000;
-    }
-    Energy[0][0] = 0;
+        //Assign default values
+        Energy[0][i] = 50000000000;
+        Energy[i][0] = 50000000000;
+    }   Energy[0][0] = 0;
 
     float CandE[NBR_SIZ]{0};
-    //int minCandE_idx = 0;
-    for(int i = 1 ; i < T; i++) // i = 1, T
+    for(int i = 1 ; i < T; i++)
     {
-        for(int j = 1; j < T ; j++) // j = 1, T
+        for(int j = 1; j < T ; j++)
         {
-            float minCandE{100000}; //10000
-            int minCandE_idx = 0;   // This is new
-            for(int Num = 0; Num < NBR_SIZ; Num++) // Num < NBR_SIZ // Num = 0
+            float minCandE{100000};
+            int minCandE_idx = 0;
+            for(int Num = 0; Num < NBR_SIZ; Num++)
             {
-                int k = {i - Nbrs[Num][0]}; // -
-                int l = {j - Nbrs[Num][1]}; // -
-                if(k >= 0 && l >= 0) // >=
+                int k = i - Nbrs[Num][0];
+                int l = j - Nbrs[Num][1];
+                if(k >= 0 && l >= 0)
                 {
-                    CandE[Num] = Energy[k][l] + DPcost(q1, q2,n, T, k,l,i,j); // added _sub
-                //}
-                //else
-                //{
-                //    CandE[Num] = 100000;//5000000;//10000;
-                //}
-                if(Num == 0 || CandE[Num] < minCandE ) // Num = 0 || added
-                {
-                    minCandE = CandE[Num];
-                    minCandE_idx = Num;
+                    CandE[Num] = Energy[k][l] + DPcost(q1, q2,n, T, k,l,i,j);
+                    if(Num == 0 || CandE[Num] < minCandE )
+                    {
+                        minCandE = CandE[Num];
+                        minCandE_idx = Num;
+                    }
                 }
-                } // new
-                Energy[i][j] = minCandE;  // added _sub
+                Energy[i][j] = minCandE;
                 Path_x[i][j] = i - Nbrs[minCandE_idx][0];
                 Path_y[i][j] = j - Nbrs[minCandE_idx][1];
             }
         }
     }
 
-    std::vector<float> x(T);
-    std::vector<float> y(T);
+    // Free up energy grid
+    for(int i = 0; i < T; i++)
+    {
+        free(Energy[i]);
+    } free(Energy);
+
+    float *x = (float *)malloc(T*sizeof(float));
+    float *y = (float *)malloc(T*sizeof(float));
     x[0] = T-1;
     y[0] = T-1;
-    int cnt{0};
+    int cnt = 0;
     while ( x[cnt] > 0 )
     {
-        int i = {(int) y[cnt]};
-        int j = {(int) x[cnt]};
+        int i = (int) y[cnt];
+        int j = (int) x[cnt];
         y[cnt + 1] = Path_x[i][j];
         x[cnt + 1] = Path_y[i][j];
         cnt++;
     }
 
-    std::vector<float> xnew(T);
-    std::vector<float> ynew(T);
+    // Free Paths
+    for(int i = 0;i < T;i ++)
+    {
+        free(Path_x[i]);
+        free(Path_y[i]);
+    } free(Path_x); free(Path_y);
+
+    float *xnew = (float *)malloc(T*sizeof(float));
+    float *ynew = (float *)malloc(T*sizeof(float));
     for (int i = 0; i < cnt; i++)
     {
         xnew[i] = (x[cnt-i-1] -x[cnt-1] )/(x[0] - x[cnt - 1]);
@@ -152,51 +144,54 @@ constexpr int Nbrs[NBR_SIZ][2] = {
     ynew[cnt-1] = 1;
     xnew[0] = 0;
     ynew[0] = 0;
-    float* gamma = new float[T]; // an array of T floats for gamma
-    float* xx1 = new float[T];
+
+    // free x and y
+    free(x);
+    free(y);
+
+    float *gamma = new float[T]; // an array of T floats for gamma
+    float *xx1 = (float *) malloc(T*sizeof(float) );
     for(int i = 0 ; i < T; i ++){ // T
         xx1[i] = (float ) i/(T - 1);
     }
+    // Perform linear interpolation
     linint(xnew, ynew, cnt, xx1, gamma, T);
+
+    //Free xx1
+    free(xx1);
+
+    // Free xnew, ynew
+    free(xnew);
+    free(ynew);
     
-
-    // Free Paths
-    for(int i = 0;i < T;i ++)
-    {
-        //free(Energy[i]);
-        free(Path_x[i]);
-        free(Path_y[i]);
-    }
-    free(Path_x); free(Path_y);
-
-    delete[] xx1;
     return(gamma);
 }
 
 float dpmatch::DPcost(float* q1, float* q2, int n, int T, int k, int l, int i, int j)
 {
-    float E2{0};
-    std::vector<float> vecarray(n);
+    float E2 = 0;
+    float *vecarray = (float *)malloc(n * sizeof(float));
 
-    for(int x = l; x <= j; ++x) // changed
+    for(int x = l; x <= j; ++x)
     {
-        float slope{(float) (i - k)/(j - l)};
-        float y = {k + (x - l) * slope}; // k + (x - l) * slope
-        int y1 = {(int)floorf(y)};
-        int y2 = {(int)ceilf(y)};
-        float f = {y - y1};
+        float slope = (float) (i - k)/(j - l);
+        float y = k + (x - l) * slope;
+        int y1 = (int)floorf(y);
+        int y2 = (int)ceilf(y);
+        float f = y - y1;
 
-        for (int kk = 0; kk < n; ++kk) // changed
+        for (int kk = 0; kk < n; ++kk)
         {
             vecarray[kk] = (f*q2[kk*T + y2] + (1 - f)*q2[kk*T + y1]*sqrt(slope))*sqrt(slope);
             E2 = E2 + (q1[kk*T + x] - vecarray[kk])*(q1[kk*T + x] - vecarray[kk]);
         }
     }
-    float E{E2/T};
+    float E = E2/T;
+    free(vecarray);
     return E;
 }
 
-void dpmatch::linint(const std::vector<float>& xnew, const std::vector<float>& ynew, int cnt, float* xx, float* yy, int n) // (float* xnew, float* ynew, int cnt, float* xx, float* yy, int n)
+void dpmatch::linint(float* xnew, float* ynew, int cnt, float* xx, float* yy, int n)
 {
 	//Assume xnew and xx are sorted. 
 	//Find the interval where xx[0] is located
@@ -249,7 +244,7 @@ shape::~shape()
 {
     free(m_pfPhi);
     free(m_pfTheta);
-    for (int i=0; i<m_n; i++)
-        free(arr[i]);
-    free(arr);
+    //for (int i=0; i<m_n; i++)
+    //    free(arr[i]);
+    //free(arr);
 }
