@@ -35,5 +35,5 @@ public:
     shape();//default constructor
     shape(int);
     ~shape();
-    float **arr;
+    //float **arr;
 };
