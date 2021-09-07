@@ -196,11 +196,11 @@ void dpmatch::linint(float* xnew, float* ynew, int cnt, float* xx, float* yy, in
 {
 	//Assume xnew and xx are sorted. 
 	//Find the interval where xx[0] is located
-  float slope{0};
+  float slope = 0;
   //int idx{0};
 	for (int i = 0; i < n; i++)
 	{
-    int idx{0}; // Not sure if this shoud be inside the for-loop
+    int idx = 0; // Not sure if this shoud be inside the for-loop
 		while(idx < cnt - 1)
 		{
 			if(xx[i] >= xnew[idx] && xx[i] <= xnew[idx+1] )

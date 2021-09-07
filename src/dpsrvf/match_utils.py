@@ -28,5 +28,6 @@ def match(q1, q2):
     Output: the warping function gamma from q2 to q1
     '''
     gamma = dpmatch().match(q1,q2)
+    q2n = group_action_by_gamma(q2, gamma)
 
-    return gamma
+    return gamma, q2n
