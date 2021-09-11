@@ -1,3 +1,5 @@
+#include<vector>
+
 class dpmatch {
 
 public:
@@ -10,7 +12,8 @@ public:
 
     float DPcost(float *q1, float *q2, int n, int T, int k, int l, int i, int j);
 
-    void linint(float *xnew, float *ynew, int cnt, float *xx, float *yy, int n);
+    void linint(const std::vector<float>& xnew, const std::vector<float>& ynew, int cnt, float* xx, float* yy, int n);
+    //(float *xnew, float *ynew, int cnt, float *xx, float *yy, int n);
 
 
 

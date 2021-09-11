@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "dpmatch.h"
+#include<vector>
 using namespace std;
 
 dpmatch::dpmatch()
@@ -63,17 +64,14 @@ constexpr int Nbrs[NBR_SIZ][2] = {
                                               };
 */
 
-    // Allocate memory for different paths
-    float **Path_x = (float **)malloc(T*sizeof(float *));
-    float **Path_y = (float **)malloc(T*sizeof(float *));
-    // Allocate memory for Energy associated with different paths
-    float **Energy = (float **)malloc(T*sizeof(float *));
+    // Initialize different paths
+    std::vector<std::vector<float>> Path_x(T, std::vector<float>(T));
+    std::vector<std::vector<float>> Path_y(T, std::vector<float>(T));
+
+    // Initialize Energies
+    std::vector<std::vector<float>> Energy(T, std::vector<float>(T));
     for(int i = 0;i < T; i++)
     {
-        Energy[i] = (float *)calloc(T,sizeof(float));
-        Path_x[i] = (float *)calloc(T,sizeof(float));
-        Path_y[i] = (float *)calloc(T,sizeof(float));
-
         //Assign default values
         Energy[0][i] = 50000000000;
         Energy[i][0] = 50000000000;
@@ -106,14 +104,8 @@ constexpr int Nbrs[NBR_SIZ][2] = {
         }
     }
 
-    // Free up energy grid
-    for(int i = 0; i < T; i++)
-    {
-        free(Energy[i]);
-    } free(Energy);
-
-    float *x = (float *)malloc(T*sizeof(float));
-    float *y = (float *)malloc(T*sizeof(float));
+    std::vector<float> x(T);
+    std::vector<float> y(T);
     x[0] = T-1;
     y[0] = T-1;
     int cnt = 0;
@@ -126,15 +118,8 @@ constexpr int Nbrs[NBR_SIZ][2] = {
         cnt++;
     }
 
-    // Free Paths
-    for(int i = 0;i < T;i ++)
-    {
-        free(Path_x[i]);
-        free(Path_y[i]);
-    } free(Path_x); free(Path_y);
-
-    float *xnew = (float *)malloc(T*sizeof(float));
-    float *ynew = (float *)malloc(T*sizeof(float));
+    std::vector<float> xnew(T);
+    std::vector<float> ynew(T);
     for (int i = 0; i < cnt; i++)
     {
         xnew[i] = (x[cnt-i-1] -x[cnt-1] )/(x[0] - x[cnt - 1]);
@@ -146,32 +131,22 @@ constexpr int Nbrs[NBR_SIZ][2] = {
     xnew[0] = 0;
     ynew[0] = 0;
 
-    // free x and y
-    free(x);
-    free(y);
-
     float *gamma = new float[T]; // an array of T floats for gamma
-    float *xx1 = (float *) malloc(T*sizeof(float) );
+    float* xx1 = new float[T];
     for(int i = 0 ; i < T; i ++){ // T
         xx1[i] = (float ) i/(T - 1);
     }
     // Perform linear interpolation
     linint(xnew, ynew, cnt, xx1, gamma, T);
+    delete[] xx1;
 
-    //Free xx1
-    free(xx1);
-
-    // Free xnew, ynew
-    free(xnew);
-    free(ynew);
-    
     return(gamma);
 }
 
 float dpmatch::DPcost(float* q1, float* q2, int n, int T, int k, int l, int i, int j)
 {
     float E2 = 0;
-    float *vecarray = (float *)malloc(n * sizeof(float));
+    std::vector<float> vecarray(n);
 
     for(int x = l; x <= j; ++x)
     {
@@ -188,11 +163,10 @@ float dpmatch::DPcost(float* q1, float* q2, int n, int T, int k, int l, int i, i
         }
     }
     float E = E2/T;
-    free(vecarray);
     return E;
 }
 
-void dpmatch::linint(float* xnew, float* ynew, int cnt, float* xx, float* yy, int n)
+void dpmatch::linint(const std::vector<float>& xnew, const std::vector<float>& ynew, int cnt, float* xx, float* yy, int n)
 {
 	//Assume xnew and xx are sorted. 
 	//Find the interval where xx[0] is located
@@ -201,11 +175,13 @@ void dpmatch::linint(float* xnew, float* ynew, int cnt, float* xx, float* yy, in
 	for (int i = 0; i < n; i++)
 	{
     int idx = 0; // Not sure if this shoud be inside the for-loop
-		while(idx < cnt - 1)
+    //float slope = 0; // this was added here
+		while(idx < cnt-1) // cnt - 1
 		{
 			if(xx[i] >= xnew[idx] && xx[i] <= xnew[idx+1] )
 			{
 				yy[i] = ynew[idx] + (xx[i] - xnew[idx]) *( ynew[idx+1] - ynew[idx] ) / ( xnew[idx+1] - xnew[idx] );
+        slope = (ynew[idx+1]  - ynew[idx])/(xnew[idx+1]  - xnew[idx]); // this was added here
 				break;
 			}
 			else if ( xx[i] <= xnew[idx+1] )
