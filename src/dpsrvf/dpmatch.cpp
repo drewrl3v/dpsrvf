@@ -19,7 +19,6 @@ float* dpmatch::match(int n, int T, float* q1, float* q2)
 {
     // n is the dimension, i.e. R^n
     // T is the size (num of points along the shape)
-/*
 constexpr int NBR_SIZ = 63;
 constexpr int Nbrs[NBR_SIZ][2] = {
             {  1,  1 }, {  1,  2 }, {  1,  3 }, {  1,  4 }, {  1,  5 }, {  1,  6 }, {  1,  7 }, {  1,  8 }, {  1,  9 }, {  1, 10 },
@@ -30,10 +29,9 @@ constexpr int Nbrs[NBR_SIZ][2] = {
             {  8,  7 }, {  8,  9 }, {  9,  1 }, {  9,  2 }, {  9,  4 }, {  9,  5 }, {  9,  7 }, {  9,  8 }, {  9, 10 }, { 10,  1 },
             { 10,  3 }, { 10,  7 }, { 10,  9 }
             };
-            */
 
-constexpr int NBR_SIZ = 7;
-constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}};
+//constexpr int NBR_SIZ = 7;
+//constexpr int Nbrs[NBR_SIZ][2] = {{1, 1}, {1, 2}, {2, 1}, {2, 3}, {3, 2},{ 1, 3},{ 3, 1}};
 
 /*
 constexpr int NBR_SIZ = 23;
@@ -158,7 +156,7 @@ float dpmatch::DPcost(float* q1, float* q2, int n, int T, int k, int l, int i, i
 
         for (int kk = 0; kk < n; ++kk)
         {
-            vecarray[kk] = (f*q2[kk*T + y2] + (1 - f)*q2[kk*T + y1]*sqrt(slope))*sqrt(slope);
+            vecarray[kk] = (f*q2[kk*T + y2] + (1 - f)*q2[kk*T + y1]*sqrt(slope));//*sqrt(slope);
             E2 = E2 + (q1[kk*T + x] - vecarray[kk])*(q1[kk*T + x] - vecarray[kk]);
         }
     }
