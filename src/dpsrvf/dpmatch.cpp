@@ -204,22 +204,3 @@ void dpmatch::linint(const std::vector<float>& xnew, const std::vector<float>& y
 			}
 		}
 }
-
-shape::shape(int v_iT)
-{
-    m_pfPhi = (float *)malloc(v_iT*sizeof(float));
-    m_pfTheta = (float *)malloc(v_iT*sizeof(float));
-    m_v11 = (float *)malloc(v_iT*sizeof(float));
-    m_v12 = (float *)malloc(v_iT*sizeof(float));
-    m_v13 = (float *)malloc(v_iT*sizeof(float));
-    m_iT = v_iT;
-}
-
-shape::~shape()
-{
-    free(m_pfPhi);
-    free(m_pfTheta);
-    //for (int i=0; i<m_n; i++)
-    //    free(arr[i]);
-    //free(arr);
-}
