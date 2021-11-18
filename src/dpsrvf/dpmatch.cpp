@@ -1,18 +1,12 @@
 #include <math.h>
 #include <stdlib.h>
 #include "dpmatch.h"
-#include<vector>
+//#include<vector>
 using namespace std;
 
-dpmatch::dpmatch()
-{
+dpmatch::dpmatch() = default;
 
-}
-
-dpmatch::~dpmatch()
-{
-
-}
+dpmatch::~dpmatch() = default;
 
 
 float* dpmatch::match(int n, int T, float* q1, float* q2)
