@@ -1,8 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "dpmatch.h"
-//#include<vector>
-using namespace std;
+#include<vector>
 
 dpmatch::dpmatch() = default;
 
