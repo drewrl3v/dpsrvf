@@ -25,17 +25,17 @@ float *dpmatch::match(int n, int T, float *q1, float *q2) {
 
 
   // Initialize different paths.
-  std::vector<std::vector<float>> Path_x(T, std::vector<float>(T));
-  std::vector<std::vector<float>> Path_y(T, std::vector<float>(T));
+  std::vector<std::vector<float>> Path_x(T, std::vector<float>(T, 0));
+  std::vector<std::vector<float>> Path_y(T, std::vector<float>(T, 0));
 
-  // Initialize Energies.
+  // Initialize Energies in cache friendly way.
   std::vector<std::vector<float>> Energy(T, std::vector<float>(T));
   for (int i = 0; i < T; i++) {
-    // Assign default values
-    Energy[0][i] = 50000000000;
     Energy[i][0] = 50000000000;
   }
-  Energy[0][0] = 0;
+  for (int i = 0; i< T; i++){
+    Energy[0][i] = 50000000000;
+  }
 
   float CandE[NBR_SIZ]{0};
   for (int i = 1; i < T; i++) {
