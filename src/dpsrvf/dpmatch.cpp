@@ -35,7 +35,7 @@ float *dpmatch::match(int n, int T, float *q1, float *q2) {
   }
   for (int i = 0; i< T; i++){
     Energy[0][i] = 50000000000;
-  }
+  } Energy[0][0] = 0;
 
   float CandE[NBR_SIZ]{0};
   for (int i = 1; i < T; i++) {
