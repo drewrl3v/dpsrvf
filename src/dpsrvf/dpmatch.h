@@ -6,9 +6,9 @@
 class dpmatch {
 
 public:
-  dpmatch();
+  //dpmatch();
 
-  ~dpmatch();
+  //~dpmatch();
 
   float *match(int n, int T, float *q1, float *q2);
 

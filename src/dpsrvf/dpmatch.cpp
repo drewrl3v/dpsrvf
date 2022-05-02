@@ -2,10 +2,13 @@
 #include <math.h>
 #include <stdlib.h>
 #include <vector>
+#include <limits>
 
-dpmatch::dpmatch() = default;
+double infinity = std::numeric_limits<double>::infinity();
 
-dpmatch::~dpmatch() = default;
+//dpmatch::dpmatch() = default;
+
+//dpmatch::~dpmatch() = default;
 
 float *dpmatch::match(int n, int T, float *q1, float *q2) {
   // n is the dimension, i.e. R^n.
@@ -23,6 +26,14 @@ float *dpmatch::match(int n, int T, float *q1, float *q2) {
       {8, 3}, {8, 5},  {8, 7},  {8, 9},  {9, 1},  {9, 2},  {9, 4},  {9, 5},
       {9, 7}, {9, 8},  {9, 10}, {10, 1}, {10, 3}, {10, 7}, {10, 9}};
 
+  //constexpr int NBR_SIZ = 7;
+  //constexpr int Nbrs[NBR_SIZ][2] = {{1,1}, {1,2}, {2,1}, {2,3}, {3,2}, {1,3}, {3,1}};
+
+	//constexpr int NBR_SIZ = 23;
+	//constexpr int Nbrs[23][2] = {{1,1}, {1,2}, {2,1}, {2,3}, {3,2}, {1,3}, {3,1}, { 1, 4 }, { 3, 4 }, {4,3}, { 4, 1 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 }, { 5, 4 }, { 5, 3 }, { 5, 2 }, { 5, 1 }, { 1, 6 }, { 5, 6 }, { 6, 5 }, { 6, 1 }  };
+
+
+
 
   // Initialize different paths.
   std::vector<std::vector<float>> Path_x(T, std::vector<float>(T, 0));
@@ -31,10 +42,10 @@ float *dpmatch::match(int n, int T, float *q1, float *q2) {
   // Initialize Energies in cache friendly way.
   std::vector<std::vector<float>> Energy(T, std::vector<float>(T));
   for (int i = 0; i < T; i++) {
-    Energy[i][0] = 50000000000;
+    Energy[i][0] = infinity;//50000000000;
   }
   for (int i = 0; i< T; i++){
-    Energy[0][i] = 50000000000;
+    Energy[0][i] = infinity;//50000000000;
   } Energy[0][0] = 0;
 
   float CandE[NBR_SIZ]{0};
